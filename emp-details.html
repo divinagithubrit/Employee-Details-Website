@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewpoint" content="width=device-width, initial-scale=1">
+    <title>Employee Details</title>
+
+    <link rel="stylesheet" href="emp-details.css">
+  </head>
+  <body background="https://img.freepik.com/free-vector/low-poly-white-background-design_1017-33204.jpg?w=2000">
+  
+    <div class="container">
+
+      <form autocomplete="off" method="post" name="google-sheet">
+
+      <h1>Employee Details</h1>
+
+      <input type="text" placeholder="Type your Name" name="name">
+      <input type="text" placeholder="Type your Address" name="address">
+      <input type="number" placeholder="Type your Empid" name="empid">
+
+
+      <select name="locid">
+        <option value="Not Selected">Select the Locid</option>
+        <option value="MAC">MAC</option>
+        <option value="MAF">MAF</option>
+        <option value="MAS">MAS</option>
+        <option value="MEPL">MEPL</option>
+        <option value="MAG">MAG</option>
+        <option value="MAX">MAX</option>
+        <option value="MAPL">MAPL</option>
+        <option value="MAJ">MAJ</option>
+        <option value="MAN">MAN</option>
+        <option value="MEPL7">MEPL7</option>
+        <option value="MVS">MVS</option>
+        <option value="MAP">MAP</option>
+      </select>
+
+      <select name="empdesign">
+        <option value="Not Selected">Select the Empdesign</option>
+        <option value="CUTTING OPERATOR">Cutting Operator</option>
+        <option value="CUTTING HELPER">Cutting Helper</option>
+        <option value="TAILOR">Tailor</option>
+        <option value="TRAINING TAILOR">Training Tailor</option>
+        <option value="SBAG TAILOR">SBAG Tailor</option>
+        <option value="PREPARATORY TAILOR">Preparatory Tailor</option>
+        <option value="TAILOR HELPER">Tailor Helper</option>
+        <option value="HELPER">Helper</option>
+        <option value="TAPE PLANT HELPER">Tape Plant Helper</option>
+        <option value="PRINTING HELPER">Printing Helper</option>
+        <option value="YARN PLANT HELPER">Yarn Plant Helper</option>
+        <option value="WARPING HELPER">Warping Helper</option>
+        <option value="PREPARATORY HELPER">Preparatory Helper</option>
+        <option value="INSPECTION HELPER">Inspection Helper</option>
+        <option value="INSPECTION">Inspection</option>
+        <option value="ELECTRICIAN">Electrician</option>
+        <option value="FEEDER">Feeder</option>
+        <option value="LOAD GIRL">Load Girl</option>
+        <option value="LOAD MAN">Load Man</option>
+        <option value="TRAINEE">Trainee</option>
+        <option value="BALING">Baling</option>
+        <option value="DRIVER">Driver</option>
+        <option value="WEAVER">Weaver</option>
+        <option value="WEAVER TRAINEE">Weaver Trainee</option>
+        <option value="FILLER CORD">Filler Cord</option>
+        <option value="DG MAINTENANCE">DG Maintenance</option>
+        <option value="BUS MAINTENANCE">Bus Maintenance</option>
+      </select>
+
+      <select name="gender">
+        <option value="Not Selected">Select Gender</option>
+        <option value="MALE">Male</option>
+        <option value="FEMALE">Female</option>
+      </select>  
+        
+
+          
+
+        
+
+
+      <button type="submit" name="submit">SUBMIT</button>
+        
+      </form>
+    </div>
+
+        <script>
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxR9MTmSuPYXVdCxe-mDCfat46I4nHEHBfCgZoWXxFV7rXYFq8tgq_9Cor_mbRxlL9X/exec'
+            const form = document.forms['google-sheet']
+          
+            form.addEventListener('submit', e => {
+              e.preventDefault()
+              fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => alert("Thanks for Contacting us..! We Will Contact You Soon..."))
+                .catch(error => console.error('Error!', error.message))
+            })
+        </script>
+  </body>
+</html>      
+    

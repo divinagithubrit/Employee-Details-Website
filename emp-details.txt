@@ -1,0 +1,208 @@
+Social Media Links
+Telegram = https://t.me/cyberwarriorsofficial
+Insta = https://www.instagram.com/mintukumarpune/
+Twitter = https://twitter.com/mintukumarpune
+Facebook page = https://www.facebook.com/cyberwarriorsindia
+
+
+
+<script>
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxkgWotCMyvIKoT9aGtPCndZdHtHrq8i972t9CKAVjO6xC7T0I/exec'
+            const form = document.forms['google-sheet']
+          
+            form.addEventListener('submit', e => {
+              e.preventDefault()
+              fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => alert("Thanks for Contacting us..! We Will Contact You Soon..."))
+                .catch(error => console.error('Error!', error.message))
+            })
+          </script>
+
+
+=============================================================================
+Code.gs
+
+var sheetName = 'Data'
+		var scriptProp = PropertiesService.getScriptProperties()
+
+		function intialSetup () {
+		  var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet()
+		  scriptProp.setProperty('key', activeSpreadsheet.getId())
+		}
+
+		function doPost (e) {
+		  var lock = LockService.getScriptLock()
+		  lock.tryLock(10000)
+
+		  try {
+			var doc = SpreadsheetApp.openById(scriptProp.getProperty('key'))
+			var sheet = doc.getSheetByName(sheetName)
+
+			var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]
+			var nextRow = sheet.getLastRow() + 1
+
+			var newRow = headers.map(function(header) {
+			  return header === 'timestamp' ? new Date() : e.parameter[header]
+			})
+
+			sheet.getRange(nextRow, 1, 1, newRow.length).setValues([newRow])
+
+			return ContentService
+			  .createTextOutput(JSON.stringify({ 'result': 'success', 'row': nextRow }))
+			  .setMimeType(ContentService.MimeType.JSON)
+		  }
+
+		  catch (e) {
+			return ContentService
+			  .createTextOutput(JSON.stringify({ 'result': 'error', 'error': e }))
+			  .setMimeType(ContentService.MimeType.JSON)
+		  }
+
+		  finally {
+			lock.releaseLock()
+		  }
+		}
+
+		-------------------------------------------------------
+
+		
+
+		URL: https://script.google.com/macros/s/AKfycbxR9MTmSuPYXVdCxe-mDCfat46I4nHEHBfCgZoWXxFV7rXYFq8tgq_9Cor_mbRxlL9X/exec
+
+
+		-------------------------------------------------------------
+		c.gs
+
+		function doGet() {
+  return HtmlService.createTemplateFromFile('Index').evaluate();
+}
+
+
+/* PROCESS FORM */
+function processForm(formObject){  
+  var result = "";
+  if(formObject.searchtext){//Execute if form passes search text
+      result = search(formObject.searchtext);
+  }
+  return result;
+}
+
+//SEARCH FOR MATCHED CONTENTS 
+function search(searchtext){
+  var spreadsheetId   = '1kHjpiIjZaYkmrXNArdkBQXMB5nwmOwXlUBlRHkRzP2g'; //** CHANGE !!!
+  var sheetName = "Data"
+  var dataRage        = 'Data!A2:Y';                                    //** CHANGE !!!
+  var data = Sheets.Spreadsheets.Values.get(spreadsheetId, dataRage).values;
+  var ar = [];
+  
+  data.forEach(function(f) {
+    if (~f.indexOf(searchtext)) {
+      ar.push(f);
+    }
+  });
+  return ar;
+}
+
+
+-------------------------------------------------------------------
+
+
+Index.html
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_top">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+        
+        <!--##JAVASCRIPT FUNCTIONS ---------------------------------------------------- -->
+        <script>
+          //PREVENT FORMS FROM SUBMITTING / PREVENT DEFAULT BEHAVIOUR
+          function preventFormSubmit() {
+            var forms = document.querySelectorAll('form');
+            for (var i = 0; i < forms.length; i++) {
+              forms[i].addEventListener('submit', function(event) {
+              event.preventDefault();
+              });
+            }
+          }
+          window.addEventListener("load", preventFormSubmit, true); 
+             
+          
+          //HANDLE FORM SUBMISSION
+          function handleFormSubmit(formObject) {
+            google.script.run.withSuccessHandler(createTable).processForm(formObject);
+            document.getElementById("search-form").reset();
+          }
+        
+          //CREATE THE DATA TABLE
+          function createTable(dataArray) {
+            if(dataArray && dataArray !== undefined && dataArray.length != 0){
+              var result = "<table class='table table-sm table-striped' id='dtable' style='font-size:0.8em'>"+
+                           "<thead style='white-space: nowrap'>"+
+                             "<tr>"+                               //Change table headings to match witht he Google Sheet
+                              "<th scope='col'>name</th>"+
+                              "<th scope='col'>address</th>"+
+                              "<th scope='col'>empid</th>"+
+                              "<th scope='col'>locid</th>"+
+                              "<th scope='col'>empdetails</th>"+
+                              "<th scope='col'>gender</th>"+
+                              
+                            "</tr>"+
+                          "</thead>";
+              for(var i=0; i<dataArray.length; i++) {
+                  result += "<tr>";
+                  for(var j=0; j<dataArray[i].length; j++){
+                      result += "<td>"+dataArray[i][j]+"</td>";
+                  }
+                  result += "</tr>";
+              }
+              result += "</table>";
+              var div = document.getElementById('search-results');
+              div.innerHTML = result;
+            }else{
+              var div = document.getElementById('search-results');
+              //div.empty()
+              div.innerHTML = "Data not found!";
+            }
+          }
+        </script>
+        <!--##JAVASCRIPT FUNCTIONS ~ END ---------------------------------------------------- -->
+        
+    </head>
+    <body>
+        <div class="container">
+            <br>
+            <div class="row">
+              <div class="col">
+            
+                  <!-- ## SEARCH FORM ------------------------------------------------ -->
+                  <form id="search-form" class="form-inline" onsubmit="handleFormSubmit(this)">
+                    <div class="form-group mb-2">
+                      <label for="searchtext">Search Text</label>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                      <input type="text" class="form-control" id="searchtext" name="searchtext" placeholder="Search Text">
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">Search</button>
+                  </form>
+                  <!-- ## SEARCH FORM ~ END ------------------------------------------- -->
+              
+              </div>    
+            </div>
+            <div class="row">
+              <div class="col">
+            
+                <!-- ## TABLE OF SEARCH RESULTS ------------------------------------------------ -->
+                <div id="search-results" class="table-responsive">
+                  <!-- The Data Table is inserted here by JavaScript -->
+                </div>
+                <!-- ## TABLE OF SEARCH RESULTS ~ END ------------------------------------------------ -->
+                  
+              </div>
+            </div>
+        </div>
+    </body>
+</html>
